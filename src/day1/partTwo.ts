@@ -13,8 +13,31 @@ const objectMapping = {
   nine: 9,
 }
 
+const reverseObjectMapping = {
+  eno: 1,
+  owt: 2,
+  eerht: 3,
+  ruof: 4,
+  evif: 5,
+  xis: 6,
+  neves: 7,
+  thgie: 8,
+  enin: 9,
+}
+
 const numberMappings = Object.keys(objectMapping).join('|')
 const regex = new RegExp(`(${numberMappings})`, 'g')
+
+const reverseNumberMapping = Object.keys(reverseObjectMapping).join('|')
+const reverseRegex = new RegExp(`(${reverseNumberMapping})`, 'g')
+
+const replaceWithMappedValues = (input) => {
+  return input.replace(regex, (match) => objectMapping[match])
+}
+
+const replaceWithMappedValuesReversed = (input) => {
+  return input.replace(reverseRegex, (match) => reverseObjectMapping[match])
+}
 
 export const main = async () => {
   const startTime = performance.now()
@@ -28,11 +51,13 @@ export const main = async () => {
       .filter((char) => Number(char))
       .map(Number)
 
-    const firstNumber = x[0]
-    const lastNumber = x.at(-1) ?? firstNumber
+    const y = replaceWithMappedValuesReversed(line.split('').reverse().join(''))
+      .split('')
+      .filter((char) => Number(char))
+      .map(Number)
 
-    console.log('line:', line)
-    console.log('result:', Number(`${firstNumber}${lastNumber}`))
+    const firstNumber = x[0]
+    const lastNumber = y.at(0) ?? firstNumber
 
     result += Number(`${firstNumber}${lastNumber}`)
   })
@@ -41,8 +66,4 @@ export const main = async () => {
   const timeElapsed = endTime - startTime
   console.log(`Time elapsed: ${timeElapsed}ms`)
   console.log(result)
-}
-
-const replaceWithMappedValues = (input) => {
-  return input.replace(regex, (match) => objectMapping[match])
 }
