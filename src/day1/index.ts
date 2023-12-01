@@ -1,3 +1,3 @@
-import { main } from './partOne'
+import { main } from './partTwo'
 
 main()
