@@ -56,7 +56,7 @@ export const main = async () => {
       .filter((char) => Number(char))
       .map(Number)
 
-    const firstNumber = x[0]
+    const firstNumber = x.at(0)
     const lastNumber = y.at(0) ?? firstNumber
 
     result += Number(`${firstNumber}${lastNumber}`)
