@@ -25,11 +25,8 @@ const reverseObjectMapping = {
   enin: 9,
 }
 
-const numberMappings = Object.keys(objectMapping).join('|')
-const regex = new RegExp(`(${numberMappings})`, 'g')
-
-const reverseNumberMapping = Object.keys(reverseObjectMapping).join('|')
-const reverseRegex = new RegExp(`(${reverseNumberMapping})`, 'g')
+const regex = new RegExp(`(one|two|three|four|five|six|seven|eight|nine)`, 'g')
+const reverseRegex = new RegExp(`(eno|owt|eerht|ruof|evif|xis|neves|thgie|enin)`, 'g')
 
 const replaceWithMappedValues = (input) => {
   return input.replace(regex, (match) => objectMapping[match])
