@@ -12,86 +12,37 @@ const objectMapping = {
   eight: 8,
   nine: 9,
 }
-const numberMappings = Object.keys(objectMapping)
+
+const numberMappings = Object.keys(objectMapping).join('|')
+const regex = new RegExp(`(${numberMappings})`, 'g')
 
 export const main = async () => {
+  const startTime = performance.now()
+
   const fileResult = await readFile(join(__dirname, 'input.txt'), 'utf-8')
   let result = 0
 
   fileResult.split('\n').forEach((line) => {
-    const splittedLine = line
-      .split(/(\d+)/)
-      .filter((value) => value !== '')
-      .map((value) => {
-        if (Number(value)) return Number(value)
+    const x = replaceWithMappedValues(line)
+      .split('')
+      .filter((char) => Number(char))
+      .map(Number)
 
-        return value
-      })
+    const firstNumber = x[0]
+    const lastNumber = x.at(-1) ?? firstNumber
 
-    let firstNumber
-    let lastNumber
-
-    for (const value of splittedLine) {
-      firstNumber = findFirstNumber(value)
-      if (firstNumber) break
-    }
-
-    const reversedSplittedLine = [...splittedLine].reverse()
-
-    for (const value of reversedSplittedLine) {
-      lastNumber = findLastNumber(value)
-      if (lastNumber) break
-    }
+    console.log('line:', line)
+    console.log('result:', Number(`${firstNumber}${lastNumber}`))
 
     result += Number(`${firstNumber}${lastNumber}`)
   })
 
+  const endTime = performance.now()
+  const timeElapsed = endTime - startTime
+  console.log(`Time elapsed: ${timeElapsed}ms`)
   console.log(result)
 }
 
-const findFirstNumber = (value: string | number) => {
-  if (Number(value) || typeof value === 'number') return Number(String(value)[0])
-
-  let result
-  let stop = false
-
-  for (let charIdx = 0; charIdx <= value.length; charIdx++) {
-    if (stop) break
-
-    const text = value.slice(0, charIdx)
-
-    for (let number of numberMappings) {
-      if (text.includes(number)) {
-        result = number
-        stop = true
-        break
-      }
-    }
-  }
-
-  return objectMapping[result]
-}
-
-const findLastNumber = (value: string | number) => {
-  if (Number(value) || typeof value === 'number')
-    return Number(String(value)[String(value).length - 1])
-
-  let result
-  let stop = false
-
-  for (let charIdx = value.length; charIdx >= 0; charIdx--) {
-    if (stop) break
-
-    const text = value.slice(charIdx, value.length)
-
-    for (let number of numberMappings) {
-      if (text.includes(number)) {
-        result = number
-        stop = true
-        break
-      }
-    }
-  }
-
-  return objectMapping[result]
+const replaceWithMappedValues = (input) => {
+  return input.replace(regex, (match) => objectMapping[match])
 }
