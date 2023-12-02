@@ -1,5 +1,4 @@
-import { readFile } from 'fs/promises'
-import { join } from 'path'
+import { readLines } from './../utils/index'
 
 const objectMapping = {
   one: 1,
@@ -38,11 +37,11 @@ const replaceWithMappedValuesReversed = (input) => {
 
 export const main = async () => {
   const startTime = performance.now()
+  const fileResult = await readLines('day1/input.txt')
 
-  const fileResult = await readFile(join(__dirname, 'input.txt'), 'utf-8')
   let result = 0
 
-  fileResult.split('\n').forEach((line) => {
+  for (const line of fileResult) {
     const x = replaceWithMappedValues(line)
       .split('')
       .filter((char) => Number(char))
@@ -57,7 +56,7 @@ export const main = async () => {
     const lastNumber = y.at(0) ?? firstNumber
 
     result += Number(`${firstNumber}${lastNumber}`)
-  })
+  }
 
   const endTime = performance.now()
   const timeElapsed = endTime - startTime

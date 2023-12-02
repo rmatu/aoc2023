@@ -1,11 +1,10 @@
-import { readFile } from 'fs/promises'
-import { join } from 'path'
+import { readLines } from '../utils'
 
 export const main = async () => {
-  const fileResult = await readFile(join(__dirname, 'input.txt'), 'utf-8')
+  const fileResult = await readLines('day1/input.txt')
   let result = 0
 
-  fileResult.split('\n').forEach((line) => {
+  for (const line of fileResult) {
     const numbers = line
       .split('')
       .filter((char) => Number(char))
@@ -15,7 +14,7 @@ export const main = async () => {
     const lastNumber = numbers[numbers.length - 1] ?? numbers[0]
 
     result += Number(`${firstNumber}${lastNumber}`)
-  })
+  }
 
   console.log(result)
 }
