@@ -5,26 +5,44 @@ const MAX_GREEN = 13
 const MAX_BLUE = 14
 
 export const main = async () => {
+  const startTime = performance.now()
   const fileResult = await readLines('day2/input.txt')
   let result = 0
 
   for (let idx = 0; idx < fileResult.length; idx++) {
     const line = fileResult[idx]
+    const passed = splitGames(line)
 
-    const blueCount = getColorCount(line, 'blue')
-    const redCount = getColorCount(line, 'red')
-    const greenCount = getColorCount(line, 'green')
-
-    console.log(line)
-    console.log({ redCount, greenCount, blueCount })
-
-    if (redCount <= MAX_RED && greenCount <= MAX_GREEN && blueCount <= MAX_BLUE) {
-      console.log('Game ID:' + (idx + 1))
+    if (passed) {
       result += idx + 1
     }
   }
 
-  console.log(result)
+  const endTime = performance.now()
+  const timeElapsed = endTime - startTime
+  console.log(`Time elapsed: ${timeElapsed}ms`)
+  console.log({ result })
+}
+
+const splitGames = (input: string) => {
+  const withoutGame = input.replace(/\bGame \d+\b:?|\b:\b/g, '')
+  const splitted = withoutGame.split(';')
+  let passed = false
+
+  for (const set of splitted) {
+    const blueCount = getColorCount(set, 'blue')
+    const redCount = getColorCount(set, 'red')
+    const greenCount = getColorCount(set, 'green')
+
+    if (blueCount <= MAX_BLUE && redCount <= MAX_RED && greenCount <= MAX_GREEN) {
+      passed = true
+    } else {
+      passed = false
+      break
+    }
+  }
+
+  return passed
 }
 
 const getColorCount = (input: string, color: 'blue' | 'red' | 'green') => {
