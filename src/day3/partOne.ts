@@ -29,8 +29,6 @@ export const main = async () => {
 
         for (let i = currNumberIndexes.start; i <= currNumberIndexes.end; i++) {
           if (array2D[lineIdx][i] === 'x') {
-            console.log('FOUND', { lineIdx, i, currNumber })
-
             result += Number(currNumber)
             break
           }
@@ -61,14 +59,6 @@ const createMarks = (fileResult: string[]) => {
         if (charIdx - 1 < 0) continue
         if (charIdx + 1 > line.length) continue
         if (lineIdx + 1 > fileResult.length) continue
-
-        if (lineIdx == 139) {
-          console.log(fileResult[0].length, 'jaja')
-          console.log(line)
-          console.log(char, 'char')
-        }
-
-        console.log(lineIdx, charIdx, char)
 
         array2D[lineIdx - 1][charIdx - 1] = 'x'
         array2D[lineIdx - 1][charIdx] = 'x'
