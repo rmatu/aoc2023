@@ -17,7 +17,7 @@ export const main = async () => {
     const resultArray = line
       .split(/(\d+|\D)/)
       .filter(Boolean)
-      .map((element) => (isNaN(element) ? element : Number(element)))
+      .map((element) => (isNaN(element as unknown as number) ? element : Number(element)))
 
     const lineIdxs = splitStringWithIndexes(line)
 
